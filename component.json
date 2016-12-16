@@ -1,6 +1,7 @@
 {
     "repos": "https://github.com/hh-components/vue-form-generator",
-    "version": "v2.0.0-beta1",
+    "version": "v2.0.0",
+    "tag": "huihui",
     "description": "vue-form-generator",
     "name": "vue-form-generator",
     "main": "vue-form-generator.js"
