@@ -1,6 +1,6 @@
 <template lang="jade">
 mixin renderField(field)
-    label.title
+    label.title(v-if="field.label")
         | {{ field.label }}
         span.help(v-if='field.help')
             i.icon
@@ -20,14 +20,19 @@ div
                 template(v-for='field in field.fields')
                     .form-group(v-if='fieldVisible(field)', :class='getFieldRowClasses(field)')
                         +renderField(field)
-            .form-group(v-else v-if='fieldVisible(field)', :class='getFieldRowClasses(field)')
+            .form-group(v-else-if='fieldVisible(field)', :class='getFieldRowClasses(field)')
                 +renderField(field)
 
 </template>
 
 <script>
 	// import Vue from "vue";
-	import {each, isFunction, isNil, isArray, isString} from "lodash";
+	// import {each, isFunction, isNil, isArray, isString} from "lodash";
+	import each from 'lodash/each';
+	import isFunction from 'lodash/isFunction';
+	import isNil from 'lodash/isNil';
+	import isArray from 'lodash/isArray';
+	import isString from 'lodash/isString';
 
 	// Load all fields from '../fields' folder
 	let Fields = require.context("./fields/", false, /^\.\/field([\w-_]+)\.vue$/);
@@ -90,8 +95,6 @@ div
 
 				if (newModel != null) {
 					this.$nextTick(() => {
-
-						// console.log("Model changed!", oldModel, newModel);
 						// Model changed!
 						if (this.options.validateAfterLoad === true && this.isNewModel !== true)
 							this.validate();
@@ -186,7 +189,6 @@ div
 				each(this.$children, (child) => {
 					if (isFunction(child.validate))
 					{
-						// console.log("Validate ", child.model)
 						let err = child.validate();
 						if (err.length > 0) {
 							hasError = true;
@@ -205,7 +207,6 @@ div
 				});				
 			},
 			modelUpdated(newVal, schema){
-				console.log("a child model has updated", newVal, schema);
 				this.model[schema] = newVal;
 				this.$emit("model-updated", this.model[schema], schema);
 			},
@@ -222,14 +223,14 @@ div
 
 <style lang="sass">
 	
-	$errorColor: #F00;
+	$errorColor: #b94a48;
 
 	fieldset.vue-form-generator {
 
 		* {
 			box-sizing: border-box;
-		}		
-		
+		}
+
 		.form-control {
 			// Default Bootstrap .form-control style
 			display: block;
@@ -243,10 +244,10 @@ div
 			border: 1px solid #ccc;
 			border-radius: 4px;
 			box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-			transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;	
+			transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 
 		} // .form-control
-		
+
 		span.help {
 			margin-left: 0.3em;
 			position: relative;
@@ -295,29 +296,32 @@ div
 				left: 0;
 				position: absolute;
 				width: 100%;
-			}  
+			}
 
 			&:hover .helpText {
 				opacity: 1;
 				pointer-events: auto;
 				transform: translateY(0px);
-			}		
+			}
 
 		} // span.help
 
 		.field-wrap {
-			display: flex;
+			display: table;
+			display: -webkit-flex;
+			width: 100%;
 
 			.buttons {
 				white-space: nowrap;
 				margin-left: 4px;
+				display: table-cell;
 			}
 
-			button, input[type=submit] {					
+			button, input[type=submit] {
 				// Default Bootstrap button style
 				display: inline-block;
 				padding: 6px 12px;
-				margin: 0px;					
+				margin: 0px;
 				font-size: 14px;
 				font-weight: normal;
 				line-height: 1.42857143;
@@ -352,7 +356,7 @@ div
 
 			} // button, input[submit]
 
-		} // .field-wrap		
+		} // .field-wrap
 
 		.hint {
 			font-style: italic;
@@ -374,25 +378,25 @@ div
 			&.featured {
 				label.title {
 					font-weight: bold;
-				}			
+				}
 			}
 
 			&.required {
 				label.title:after {
 					content: "*";
 					font-weight: normal;
-					color: Red;
+					color: #e60808;
 					position: absolute;
 					padding-left: 0.2em;
 					font-size: 1em;
-				}	
+				}
 			}
 
 			&.disabled {
 				label.title {
 					color: #666;
 					font-style: italic;
-				}			
+				}
 			}
 
 			&.error {
@@ -415,7 +419,7 @@ div
 							font-weight: 600;
 					}
 
-				} // .errors	
+				} // .errors
 
 			} // .error
 

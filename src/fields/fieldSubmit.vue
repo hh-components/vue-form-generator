@@ -1,26 +1,34 @@
 <template lang="jade">
-	input(type="submit", :value="schema.buttonText", @click="click", :name="schema.inputName")
+	input(type="submit", :value="buttonText()", @click="click", :name="schema.inputName")
 </template>
 
 <script>
+	import isFunction from 'lodash/isFunction';
 	import abstractField from "./abstractField";
-	import { isFunction } from "lodash";
 
 	export default {
 		mixins: [ abstractField ],
 
 		methods: {
 			click() {
-				if (this.schema.validateBeforeSubmit === true)
-				{
+				if (this.schema.validateBeforeSubmit === true) {
 					if (!this.$parent.validate()) {
 						// There are validation errors. Stop the submit
 						return;
 					}
 				}
 
-				if (isFunction(this.schema.onSubmit))
+				if (isFunction(this.schema.onSubmit)) {
 					this.schema.onSubmit(this.model, this.schema);
+				}
+			},
+
+			buttonText() {
+				if (isFunction(this.schema.buttonText)) {
+					return this.schema.buttonText()
+				}
+
+				return this.schema.buttonText
 			}
 		}
 	};
@@ -31,7 +39,7 @@
 	.vue-form-generator .field-submit input {
 		// Default bootstrap primary button style
 		color: #fff !important;
-		background-color: #337ab7 !important;
-		border-color: #2e6da4 !important;
+		background-color: #37578d !important;
+		margin: 0 auto !important;
 	}
 </style>

@@ -1,14 +1,16 @@
 <template lang="jade">
 
 	.checkbox-list(:disabled="disabled")
-		label(v-for="item in items")
+		p(v-if="!items") {{ schema.placeholder }}
+		label(v-else v-for="item in items")
 			input(type="checkbox", :checked="getItemIsChecked(item)", :disabled="disabled", @change="onChanged($event, item)")
 			| {{ getItemName(item) }}
 
 </template>
 
 <script>
-	import {isObject, isNil} from "lodash";
+	import isObject from 'lodash/isObject';
+	import isNil from 'lodash/isNil';
 	import abstractField from "./abstractField";
 	
 	export default {
