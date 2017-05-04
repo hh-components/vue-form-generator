@@ -20,19 +20,19 @@
 		methods: {
 			addItem(item) {
 				   let item = this.value
-       				this.AddedItems.push(item);
-       				this.value = "";
-      	},
+       				   this.AddedItems.push(item);
+       				   this.value = "";
+      			},
 			delAddedItem(index) {
         			this.AddedItems.splice(index, 1);
-      	},
-      		getItemName(item) {
+      			},
+      		        getItemName(item) {
 				if (isObject(item) && item.name)
 					return item.name;
 
 				return item;
 			},
-      		getItemIsAdded(item) {
+      		       getItemIsAdded(item) {
 				return (this.AddedItems && this.AddedItems.indexOf(item) != -1)	
 		}
 	}
@@ -40,16 +40,15 @@
 </script>
 
 <style lang="sass">
-	.vue-form-generator .field-tips{
+	.vue-form-generator .field-tags{
 		.wrapper {
 			width: 100%;
 			position: relative;
 			overflow: hidden;
 		}
-		span.tag-wrapper{
+		span.tag{
 			display:inline-block !important;
 			position:relative;
-
 		}
 	}
 </style>
